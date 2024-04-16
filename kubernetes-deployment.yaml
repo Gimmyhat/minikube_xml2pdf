@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xml2pdf-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xml2pdf
+  template:
+    metadata:
+      labels:
+        app: xml2pdf
+    spec:
+      containers:
+      - name: xml2pdf
+        image: gimmyhat/xml_to_pdf:latest
+        ports:
+        - containerPort: 10016
+        env:
+        - name: USER
+          value: "rgf"
+        - name: PASSWORD
+          value: "izuch_pdf"
+        volumeMounts:
+        - mountPath: "/data"
+          name: data-volume
+      volumes:
+      - name: data-volume
+        hostPath:
+          path: /_geol/wd/xml_to_pdf
+          type: Directory
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: xml2pdf-service
+spec:
+  selector:
+    app: xml2pdf
+  ports:
+  - protocol: TCP
+    port: 10016
+    targetPort: 10016
+  type: LoadBalancer

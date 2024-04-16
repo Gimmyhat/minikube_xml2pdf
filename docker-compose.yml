@@ -1,0 +1,12 @@
+version: '3'
+services:
+  myapp-service:
+    image: xml2pdf:latest
+    environment:
+      - USER=rgf
+      - PASSWORD=izuch_pdf
+    volumes:
+      - /_geol/wd/xml_to_pdf:/data
+    ports:
+      - "10016:10016"
+    restart: always
